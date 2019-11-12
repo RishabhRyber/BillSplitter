@@ -8,6 +8,7 @@ package Frames;
 import com.sun.org.apache.xml.internal.utils.NameSpace;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import utils.DbConnection;
 
@@ -27,8 +28,8 @@ public class History extends javax.swing.JFrame {
         initComponents();
         DbConnection dbConnection = new DbConnection();
         ResultSet res = dbConnection.runQuery("SELECT * FROM main");
-        String date, name, paidBy, amount,finalRes = "\t Date \tTitle \tPaid By \tAmount\n";
-        finalRes+="\t-----------------------------------------------------------------------------------\n\n";
+        String date, name, paidBy, amount,finalRes = "    Date \tTitle \tPaid By \tAmount\n";
+        finalRes+="----------------------------------------------------------------------------------------------\n\n";
         try {
             while (res.next()) {
                 date = res.getString("date");
@@ -38,20 +39,25 @@ public class History extends javax.swing.JFrame {
                 for(int i=0;i<4;i++)
                     if(paidBy.equals(names[i]))
                         spent[i]+=Integer.parseInt(amount);
-                finalRes+="\t" + date+"\t"+name+"\t"+paidBy+"\t"+amount+"\n\n";
+                finalRes+="    " + date+"\t"+name+"\t"+paidBy+"\t"+amount+"\n\n";
             }
 
         } catch (SQLException ex) { 
             System.err.println(ex);
         }
         finalRes+="\n---------------------------------------------------------------------------------------------------------\n";
-        for (int i = 0; i < 4; i++)
-            finalRes += "\n\n\t" + names[i] + "\tpaid" + " \t" + spent[i];
-
+        for (int i = 0; i < 4; i++){
+            finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
+        }
         JTextArea jTextArea  = new JTextArea(finalRes);
-        jTextArea.setBounds(100, 50, 500, 600);
+        jTextArea.setBounds(50, 50, 400, 500);
         jTextArea.setEditable(false);
-        add(jTextArea);
+        jTextArea.setRows(4);
+        JScrollPane taScroll = new JScrollPane(jTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        taScroll.setBounds(50, 50, 400, 500);
+        add(taScroll);
+        
+//        add(jTextArea);
     }
 
     /**
@@ -64,33 +70,49 @@ public class History extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(700, 600));
-        setPreferredSize(new java.awt.Dimension(700, 600));
+        setMinimumSize(new java.awt.Dimension(500, 650));
+        setPreferredSize(new java.awt.Dimension(500, 650));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel1.setText("History");
+
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jButton1.setText("Close");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(283, 283, 283)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addGap(178, 178, 178)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(418, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(516, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 482, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        hide();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,6 +151,7 @@ public class History extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

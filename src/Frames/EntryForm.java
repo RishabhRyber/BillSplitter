@@ -5,6 +5,7 @@
  */
 package Frames;
 
+import javax.swing.JOptionPane;
 import utils.DbConnection;
 
 /**
@@ -144,6 +145,7 @@ public class EntryForm extends javax.swing.JFrame {
         String date = "27/03/2019";
         String sql = "INSERT INTO `main` (`date`, `title`, `paid_by`, `amount`) VALUES ('"+ date +"', '" +name+ "', '" + paid_by + "' , '"+amount +"' )";
         dbConnection.runUpdate(sql);
+        JOptionPane.showMessageDialog(this, "Expense Updated");
     }//GEN-LAST:event_submitBtnActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
