@@ -16,6 +16,81 @@ import utils.DbConnection;
  *
  * @author Rishabh
  */
+
+
+class Person implements Comparable<Person>{
+    public String name;
+    double costpaid = 0;
+    double moneytoget;
+    Scanner scanner = new Scanner(System.in);
+    ArrayList<String> mainString = new ArrayList<>();
+//-------------------------------------------------------------------------------------------------------------------------- 
+    void addcost(double money)
+    {
+        costpaid += money;
+    }
+    void calcMoneyToGet(double pool)
+    {
+        moneytoget = costpaid - pool ;
+    }
+    double getCostPaid(){
+        return costpaid;
+    }
+    double getMoneyToGet(){
+        return moneytoget;
+    }
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+    public int compareTo(Person m)
+    {
+        if (this.moneytoget - m.moneytoget > 0)
+            return 1;
+        else if ( this.moneytoget - m.moneytoget < 0 )
+            return -1;   
+        else
+            return 0;     
+    }
+
+    void makezero()
+    {
+        moneytoget = 0;
+    }
+
+    void decreaseamount(double x)
+    {
+        moneytoget = moneytoget - x;
+    }
+
+    void putinstring( Person p )
+    {
+        if( Math.abs(moneytoget) >= p.getMoneyToGet() ){
+            finalRes += "\n\n    " + this.name + " owes " + p.name + " Rs. " + p.getMoneyToGet();
+            moneytoget += p.getMoneyToGet();
+            p.makezero();
+        }
+
+        else{
+            mainString.add(this.name + " owes " + p.name + " Rs. " + Math.abs(moneytoget));
+            p.decreaseamount( Math.abs(moneytoget) );
+            makezero();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public class History extends javax.swing.JFrame {
     
     /**
@@ -45,9 +120,14 @@ public class History extends javax.swing.JFrame {
         } catch (SQLException ex) { 
             System.err.println(ex);
         }
+
+
+
+
         finalRes+="\n---------------------------------------------------------------------------------------------------------\n";
-        for (int i = 0; i < 4; i++){
-            finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
+        while(1){
+            // finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
+            finalRes += "\n\n    " +  
         }
         JTextArea jTextArea  = new JTextArea(finalRes);
         jTextArea.setBounds(50, 50, 400, 500);
