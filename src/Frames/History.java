@@ -24,7 +24,6 @@ class Person implements Comparable<Person>{
     String name;
     double costpaid = 0;
     double moneytoget;
-    Scanner scanner = new Scanner(System.in);
     ArrayList<String> mainString = new ArrayList<>();
 //-------------------------------------------------------------------------------------------------------------------------- 
     Person( String namei, double costpaidi )
@@ -84,6 +83,7 @@ class Person implements Comparable<Person>{
             p.decreaseamount( Math.abs(moneytoget) );
             makezero();
         }
+        return "";
     }
 }
 
@@ -101,16 +101,12 @@ public class History extends javax.swing.JFrame {
     double [] spent = new double[4];
     String[] names = {"Rahul","Rishabh","Pranav","Pandey"};
 
-    ArrayList<Person> arrofpeople = new ArrayList<>(numberofpeople);
+    ArrayList<Person> arrofpeople = new ArrayList<>(4);
 
     
     public History() {
         initComponents();
-        arrofpeople.add( new Person( names[0], spent[0] ) );
-        arrofpeople.add( new Person( names[1], spent[1] ) );
-        arrofpeople.add( new Person( names[2], spent[2] ) );
-        arrofpeople.add( new Person( names[3], spent[3] ) );
-
+       
         DbConnection dbConnection = new DbConnection();
         ResultSet res = dbConnection.runQuery("SELECT * FROM main");
         String date, name, paidBy, amount,finalRes = "    Date \tTitle \tPaid By \tAmount\n";
@@ -131,27 +127,35 @@ public class History extends javax.swing.JFrame {
             System.err.println(ex);
         }
 
+        arrofpeople.add( new Person( names[0], spent[0] ) );
+        arrofpeople.add( new Person( names[1], spent[1] ) );
+        arrofpeople.add( new Person( names[2], spent[2] ) );
+        arrofpeople.add( new Person( names[3], spent[3] ) );
 
 
 
         finalRes+="\n---------------------------------------------------------------------------------------------------------\n";
+        
+//        finalRes += "Initial list is " + arrofpeople.get(0).getCostPaid() +"  " + arrofpeople.get(1).getCostPaid() +"  " + arrofpeople.get(2).getCostPaid() +"  " + arrofpeople.get(3).getCostPaid();
 
         double mainpool = spent[0] + spent[1] + spent[2] + spent[3];
+//        finalRes += "Main pool is " + mainpool + "\n\n";
         for(int i=0;i<4;i++)
         {
             arrofpeople.get(i).calcMoneyToGet( mainpool/4 );
         }  
         Collections.sort(arrofpeople);
+        
 
-        while(arrofpeople.get(numberofpeople - 1).getMoneyToGet() != 0  &&  
+        while(arrofpeople.get(4 - 1).getMoneyToGet() != 0  &&  
                 arrofpeople.get(0).getMoneyToGet() != 0 )
         {
-            finalRes += arrofpeople.get(0).putinstring( arrofpeople.get(numberofpeople-1));
+            finalRes += arrofpeople.get(0).putinstring( arrofpeople.get(4-1));
             Collections.sort(arrofpeople);
         } 
 
         arrofpeople.get(0).makezero();
-        arrofpeople.get(numberofpeople-1).makezero(); 
+        arrofpeople.get(4-1).makezero(); 
 
         // while(1){
         //     // finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
