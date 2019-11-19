@@ -84,8 +84,6 @@ class project
     public static void main(String args[])
     {
         Person arrofpeople[] = new Person[4];
-        // ArrayList<Expences> expencesList = new ArrayList<>();
-        //Gathering data about the person
         arrofpeople[0].name = "Rahul";
         arrofpeople[1].name = "Rishab";
         arrofpeople[2].name = "Pranav";
@@ -112,7 +110,7 @@ class project
                     System.out.println("Who paid?");
                     for(int i=0;i<numberofpeople;i++)
                     {
-                        System.out.println( (i+1)+ ". " +arrofpeople.get(i).getName()); 
+                        System.out.println( (i+1)+ ". " +arrofpeople[i].getName()); 
                     }
                     temp = scan.nextInt();
                     temp = temp -1 ;
@@ -129,18 +127,18 @@ class project
                 double mainpool = spent[0] + spent[1] + spent[2] + spent[3];
                 for(int i=0;i<4;i++)
                 {
-                    arrofpeople[i]calcMoneyToGet( mainpool/4 );
+                    arrofpeople[i].calcMoneyToGet( mainpool/4 );
                 }  
                 Collections.sort(arrofpeople);
 
                 while(arrofpeople[numberofpeople - 1].getMoneyToGet() != 0  &&  
                         arrofpeople[0].getMoneyToGet() != 0 )
                 {
-                    arrofpeople[0].putinstring( arrofpeople[numberofpeople-1]);
+                    finalRes += arrofpeople[0].putinstring( arrofpeople[numberofpeople-1]);
                     Collections.sort(arrofpeople);
                 } 
-                
-                arrofpeople.get(0).makezero();
+
+                arrofpeople[0].makezero();
                 arrofpeople[numberofpeople-1].makezero(); 
                 break;
 

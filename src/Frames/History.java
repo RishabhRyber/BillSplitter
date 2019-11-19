@@ -5,6 +5,8 @@
  */
 package Frames;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import com.sun.org.apache.xml.internal.utils.NameSpace;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,12 +21,18 @@ import utils.DbConnection;
 
 
 class Person implements Comparable<Person>{
-    public String name;
+    String name;
     double costpaid = 0;
     double moneytoget;
     Scanner scanner = new Scanner(System.in);
     ArrayList<String> mainString = new ArrayList<>();
 //-------------------------------------------------------------------------------------------------------------------------- 
+    Person( String namei, double costpaidi )
+    {
+        name = namei;
+        costpaid = costpaidi;
+    }
+
     void addcost(double money)
     {
         costpaid += money;
@@ -62,12 +70,13 @@ class Person implements Comparable<Person>{
         moneytoget = moneytoget - x;
     }
 
-    void putinstring( Person p )
+    String putinstring( Person p )
     {
         if( Math.abs(moneytoget) >= p.getMoneyToGet() ){
-            finalRes += "\n\n    " + this.name + " owes " + p.name + " Rs. " + p.getMoneyToGet();
+            String toreturn = "\n\n    " + this.name + " owes " + p.name + " Rs. " + p.getMoneyToGet() ;
             moneytoget += p.getMoneyToGet();
             p.makezero();
+            return toreturn;
         }
 
         else{
@@ -96,11 +105,18 @@ public class History extends javax.swing.JFrame {
     /**
      * Creates new form History
      */
-    int [] spent = new int[4];
+    double [] spent = new double[4];
     String[] names = {"Rahul","Rishabh","Pranav","Pandey"};
+
+    Person arrofpeople[] = new Person[4];
     
     public History() {
         initComponents();
+        arrofpeople[0] = new Person( names[0], spent[0] );
+        arrofpeople[1] = new Person( names[1], spent[1] );
+        arrofpeople[2] = new Person( names[2], spent[2] );
+        arrofpeople[3] = new Person( names[3], spent[3] );
+
         DbConnection dbConnection = new DbConnection();
         ResultSet res = dbConnection.runQuery("SELECT * FROM main");
         String date, name, paidBy, amount,finalRes = "    Date \tTitle \tPaid By \tAmount\n";
@@ -125,9 +141,27 @@ public class History extends javax.swing.JFrame {
 
 
         finalRes+="\n---------------------------------------------------------------------------------------------------------\n";
+
+        double mainpool = spent[0] + spent[1] + spent[2] + spent[3];
+        for(int i=0;i<4;i++)
+        {
+            arrofpeople[i].calcMoneyToGet( mainpool/4 );
+        }  
+        Collections.sort(arrofpeople);
+
+        while(arrofpeople[numberofpeople - 1].getMoneyToGet() != 0  &&  
+                arrofpeople[0].getMoneyToGet() != 0 )
+        {
+            finalRes += arrofpeople[0].putinstring( arrofpeople[numberofpeople-1]);
+            Collections.sort(arrofpeople);
+        } 
+
+        arrofpeople[0].makezero();
+        arrofpeople[numberofpeople-1].makezero(); 
+
         while(1){
             // finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
-            finalRes += "\n\n    " +  
+            finalRes += "\n\n    " ;
         }
         JTextArea jTextArea  = new JTextArea(finalRes);
         jTextArea.setBounds(50, 50, 400, 500);
