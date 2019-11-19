@@ -93,13 +93,6 @@ class Person implements Comparable<Person>{
 
 
 
-
-
-
-
-
-
-
 public class History extends javax.swing.JFrame {
     
     /**
@@ -108,14 +101,15 @@ public class History extends javax.swing.JFrame {
     double [] spent = new double[4];
     String[] names = {"Rahul","Rishabh","Pranav","Pandey"};
 
-    Person arrofpeople[] = new Person[4];
+    ArrayList<Person> arrofpeople = new ArrayList<>(numberofpeople);
+
     
     public History() {
         initComponents();
-        arrofpeople[0] = new Person( names[0], spent[0] );
-        arrofpeople[1] = new Person( names[1], spent[1] );
-        arrofpeople[2] = new Person( names[2], spent[2] );
-        arrofpeople[3] = new Person( names[3], spent[3] );
+        arrofpeople.add( new Person( names[0], spent[0] ) );
+        arrofpeople.add( new Person( names[1], spent[1] ) );
+        arrofpeople.add( new Person( names[2], spent[2] ) );
+        arrofpeople.add( new Person( names[3], spent[3] ) );
 
         DbConnection dbConnection = new DbConnection();
         ResultSet res = dbConnection.runQuery("SELECT * FROM main");
@@ -145,24 +139,24 @@ public class History extends javax.swing.JFrame {
         double mainpool = spent[0] + spent[1] + spent[2] + spent[3];
         for(int i=0;i<4;i++)
         {
-            arrofpeople[i].calcMoneyToGet( mainpool/4 );
+            arrofpeople.get(i).calcMoneyToGet( mainpool/4 );
         }  
         Collections.sort(arrofpeople);
 
-        while(arrofpeople[numberofpeople - 1].getMoneyToGet() != 0  &&  
-                arrofpeople[0].getMoneyToGet() != 0 )
+        while(arrofpeople.get(numberofpeople - 1).getMoneyToGet() != 0  &&  
+                arrofpeople.get(0).getMoneyToGet() != 0 )
         {
-            finalRes += arrofpeople[0].putinstring( arrofpeople[numberofpeople-1]);
+            finalRes += arrofpeople.get(0).putinstring( arrofpeople.get(numberofpeople-1));
             Collections.sort(arrofpeople);
         } 
 
-        arrofpeople[0].makezero();
-        arrofpeople[numberofpeople-1].makezero(); 
+        arrofpeople.get(0).makezero();
+        arrofpeople.get(numberofpeople-1).makezero(); 
 
-        while(1){
-            // finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
-            finalRes += "\n\n    " ;
-        }
+        // while(1){
+        //     // finalRes += "\n\n    " + names[i] + "\tpaid" + " \t" + spent[i];
+        //     finalRes += "\n\n    " ;
+        // }
         JTextArea jTextArea  = new JTextArea(finalRes);
         jTextArea.setBounds(50, 50, 400, 500);
         jTextArea.setEditable(false);
